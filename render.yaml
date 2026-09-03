@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: corn-calc-mom
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+
+    # -------------------------------------------------------------------------
+    # ที่เก็บข้อมูลถาวร (Persistent Disk)
+    # -------------------------------------------------------------------------
+    # แผน free ของ Render ผูกดิสก์ไม่ได้ และล้างไฟล์ทุกครั้งที่ deploy ใหม่
+    # แต่แอปนี้สำรองสูตรโรงงานไว้ใน Client Storage ของเบราว์เซอร์คุณแม่อยู่แล้ว
+    # ข้อมูลจึงไม่หาย แม้รันบนแผน free
+    #
+    # ถ้าอัปเป็นแผน starter เมื่อไหร่ ให้เปลี่ยน plan: free เป็น plan: starter
+    # แล้วเอาคอมเมนต์ 4 บรรทัดล่างนี้ออก แอปจะย้ายไปเก็บไฟล์บนดิสก์ให้เองทันที
+    # (ครั้งแรกจะคัดลอกไฟล์ตั้งต้นที่มากับโค้ดขึ้นดิสก์ให้อัตโนมัติ)
+    #
+    # disk:
+    #   name: corn-data
+    #   mountPath: /var/data
+    #   sizeGB: 1

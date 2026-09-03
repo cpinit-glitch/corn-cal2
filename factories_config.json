@@ -1,0 +1,54 @@
+[
+  {
+    "id": "cp",
+    "name": "CP (ศรีสะเกษ)",
+    "moisture_bias": -0.5,
+    "req_sifting": true,
+    "transport_rate": 0.15,
+    "default_price": 10.1,
+    "color": "#C2410C",
+    "bg_color": "#FFEDD5",
+    "emoji": "🏢",
+    "is_default": true,
+    "target_moisture": 14.5
+  },
+  {
+    "id": "kaona",
+    "name": "ก้าวหน้าอาหารสัตว์",
+    "moisture_bias": 0.0,
+    "req_sifting": true,
+    "transport_rate": 0.15,
+    "default_price": 10.15,
+    "color": "#059669",
+    "bg_color": "#D1FAE5",
+    "emoji": "🌽",
+    "is_default": true,
+    "target_moisture": 14.5
+  },
+  {
+    "id": "betagro",
+    "name": "Betagro (หนองบุญมาก)",
+    "moisture_bias": -1.2,
+    "req_sifting": false,
+    "transport_rate": 0.35,
+    "default_price": 9.8,
+    "color": "#0369A1",
+    "bg_color": "#E0F2FE",
+    "emoji": "🏭",
+    "is_default": true,
+    "target_moisture": 14.5
+  },
+  {
+    "id": "sunfeed",
+    "name": "Sunfeed (สระบุรี)",
+    "moisture_bias": -2.1,
+    "req_sifting": true,
+    "transport_rate": 0.4,
+    "default_price": 10.1,
+    "color": "#D97706",
+    "bg_color": "#FEF3C7",
+    "emoji": "🌾",
+    "is_default": true,
+    "target_moisture": 14.5
+  }
+]
