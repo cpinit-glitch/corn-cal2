@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🌽 เปรียบเทียบกำไรโรงงานข้าวโพด (สำหรับคุณแม่)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'Sarabun', 'sans-serif'],
+          },
+          colors: {
+            appBg: '#F8FAFC',
+            appHeader: '#0F172A',
+            appCard: '#FFFFFF',
+            winnerBg: '#F0FDF4',
+            winnerBorder: '#22C55E',
+            winnerGreen: '#16A34A',
+            lossRed: '#DC2626',
+            lossBg: '#FEF2F2',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center p-0 sm:p-4">
+
+  <!-- Main Mobile App Wrapper (Max Width 500px centered) -->
+  <div class="w-full max-w-[500px] min-h-screen sm:min-h-[90vh] bg-slate-50 sm:shadow-2xl sm:rounded-3xl flex flex-col overflow-hidden relative">
+
+    <!-- ================================================================= -->
+    <!-- VIEW 0: PIN GATE SCREEN -->
+    <!-- ================================================================= -->
+    <div id="screen-pin" class="flex-1 flex flex-col items-center justify-between p-6 sm:p-8 bg-slate-900 text-white">
+      <div class="w-full flex flex-col items-center mt-6">
+        <div class="w-24 h-24 bg-amber-400/20 border-2 border-amber-400 rounded-full flex items-center justify-center text-5xl mb-4 shadow-lg">
+          🌽
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-wide">แอพคำนวณข้าวโพด</h1>
+        <p class="text-slate-400 text-sm mt-1">ใส่รหัสผ่าน 4 หลักเพื่อเข้าใช้งาน</p>
+
+        <!-- 4 PIN Dots -->
+        <div id="pin-dots" class="flex gap-5 my-8">
+          <div class="w-6 h-6 rounded-full border-2 border-amber-400 bg-transparent transition-all duration-200"></div>
+          <div class="w-6 h-6 rounded-full border-2 border-amber-400 bg-transparent transition-all duration-200"></div>
+          <div class="w-6 h-6 rounded-full border-2 border-amber-400 bg-transparent transition-all duration-200"></div>
+          <div class="w-6 h-6 rounded-full border-2 border-amber-400 bg-transparent transition-all duration-200"></div>
+        </div>
+
+        <div id="pin-error" class="text-rose-400 font-semibold text-base h-6"></div>
+      </div>
+
+      <!-- Keypad -->
+      <div class="w-full max-w-[340px] grid grid-cols-3 gap-3 mb-6">
+        <button onclick="pressPin('1')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">1</button>
+        <button onclick="pressPin('2')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">2</button>
+        <button onclick="pressPin('3')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">3</button>
+        <button onclick="pressPin('4')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">4</button>
+        <button onclick="pressPin('5')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">5</button>
+        <button onclick="pressPin('6')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">6</button>
+        <button onclick="pressPin('7')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">7</button>
+        <button onclick="pressPin('8')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">8</button>
+        <button onclick="pressPin('9')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">9</button>
+        <button onclick="clearPin()" class="h-16 bg-slate-800/60 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-lg font-bold text-rose-300 shadow transition-all">ลบหมด</button>
+        <button onclick="pressPin('0')" class="h-16 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-2xl font-bold text-white shadow transition-all">0</button>
+        <button onclick="backspacePin()" class="h-16 bg-slate-800/60 hover:bg-slate-700 active:bg-slate-600 active:scale-95 rounded-2xl text-xl font-bold text-amber-300 shadow transition-all flex items-center justify-center">⌫</button>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 1: MAIN INPUT & CALCULATOR SCREEN -->
+    <!-- ================================================================= -->
+    <div id="screen-main" class="hidden flex-1 flex flex-col p-4 pb-12 overflow-y-auto space-y-4">
+      
+      <!-- Top Header Card -->
+      <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🌽</span>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold leading-tight">เปรียบเทียบกำไรโรงงาน</h2>
+            <p class="text-xs text-slate-400">หาโรงงานที่คุ้มค่าที่สุดวันนี้</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button onclick="openTableModal()" title="ดูตารางมาตรฐานหักความชื้น" class="w-10 h-10 rounded-full hover:bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition">
+            📊
+          </button>
+          <button onclick="showManagerScreen()" title="จัดการ/เพิ่มสูตรโรงงาน" class="w-10 h-10 rounded-full hover:bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition">
+            ⚙️
+          </button>
+          <button onclick="lockApp()" title="ล็อคหน้าจอ" class="w-10 h-10 rounded-full hover:bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition">
+            🔒
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 1: ราคารับซื้อข้าวโพดชื้น -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🌾</span>
+          <h3 class="text-base sm:text-lg font-bold text-slate-800">ราคารับซื้อข้าวโพดชื้น (ที่ความชื้น 30%)</h3>
+        </div>
+        <p class="text-xs text-slate-500">ราคาที่เราจ่ายซื้อข้าวโพดสดจากเกษตรกร (คำนวณที่ความชื้นมาตรฐาน 30%)</p>
+        
+        <!-- Input Box -->
+        <div class="relative">
+          <input type="text" id="input-buy-price" class="w-full text-center text-3xl font-extrabold py-3 px-4 rounded-xl border-2 border-slate-300 focus:border-emerald-600 focus:outline-none bg-slate-50 text-slate-900" placeholder="0.00">
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 font-semibold text-slate-400 text-sm">บาท/กก.</span>
+        </div>
+
+        <!-- Quick Adjustment Buttons -->
+        <div class="grid grid-cols-6 gap-1.5 pt-1">
+          <button onclick="adjustVal('input-buy-price', -0.50)" class="py-2.5 bg-slate-100 active:bg-slate-200 text-rose-600 font-bold rounded-lg text-xs sm:text-sm">-0.50</button>
+          <button onclick="adjustVal('input-buy-price', -0.10)" class="py-2.5 bg-slate-100 active:bg-slate-200 text-rose-600 font-bold rounded-lg text-xs sm:text-sm">-0.10</button>
+          <button onclick="appendDot('input-buy-price')" class="py-2.5 bg-amber-50 active:bg-amber-100 text-amber-700 font-bold rounded-lg text-xs sm:text-sm">📍 จุด .</button>
+          <button onclick="adjustVal('input-buy-price', +0.10)" class="py-2.5 bg-slate-100 active:bg-slate-200 text-emerald-700 font-bold rounded-lg text-xs sm:text-sm">+0.10</button>
+          <button onclick="adjustVal('input-buy-price', +0.50)" class="py-2.5 bg-slate-100 active:bg-slate-200 text-emerald-700 font-bold rounded-lg text-xs sm:text-sm">+0.50</button>
+          <button onclick="clearVal('input-buy-price')" class="py-2.5 bg-rose-50 active:bg-rose-100 text-rose-600 font-bold rounded-lg text-xs sm:text-sm">✕ ลบ</button>
+        </div>
+
+        <!-- Big Primary Calculate Button -->
+        <button onclick="executeCalculate()" class="w-full mt-2 py-4 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 active:scale-[0.98] text-white rounded-2xl text-xl sm:text-2xl font-bold shadow-lg shadow-emerald-700/30 flex items-center justify-center gap-2 transition-all">
+          <span>🏆</span>
+          <span>คำนวณหาโรงงานที่คุ้มที่สุด</span>
+        </button>
+      </div>
+
+      <!-- Section: ราคาขายป้ายโรงงานวันนี้ -->
+      <div class="flex items-center justify-between pt-1">
+        <h3 class="text-base sm:text-lg font-bold text-slate-800">🏷️ ราคาขายป้ายโรงงานวันนี้</h3>
+        <button onclick="showManagerScreen()" class="text-xs sm:text-sm font-bold text-sky-600 hover:underline flex items-center gap-1">
+          <span>⚙️ ตั้งค่าโรงงาน</span>
+        </button>
+      </div>
+
+      <!-- Dynamic Factory Cards List -->
+      <div id="factory-inputs-list" class="space-y-3">
+        <!-- Generated by JavaScript -->
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 2: RESULTS SCREEN (จัดอันดับกำไร) -->
+    <!-- ================================================================= -->
+    <div id="screen-results" class="hidden flex-1 flex flex-col p-4 pb-12 overflow-y-auto space-y-4">
+      
+      <!-- Results Header -->
+      <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="showMainScreen()" class="w-9 h-9 rounded-full bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-200">
+            ←
+          </button>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold leading-tight">🏆 สรุปผลกำไรโรงงาน</h2>
+            <p id="results-sub-title" class="text-xs text-slate-400">ซื้อ 6.75 ฿ (ชื้น 30%) | 4 โรงงาน</p>
+          </div>
+        </div>
+        <button onclick="executeCalculate()" class="text-xs bg-emerald-600 hover:bg-emerald-500 py-1.5 px-3 rounded-lg font-semibold">
+          🔄 คำนวณใหม่
+        </button>
+      </div>
+
+      <!-- Dynamic Results Cards List -->
+      <div id="results-cards-container" class="space-y-3.5">
+        <!-- Winner Banner & Runner-up cards generated by JavaScript -->
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 3: FACTORY MANAGER SCREEN (จัดการสูตรโรงงาน) -->
+    <!-- ================================================================= -->
+    <div id="screen-manager" class="hidden flex-1 flex flex-col p-4 pb-12 overflow-y-auto space-y-4">
+      
+      <!-- Manager Header -->
+      <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="showMainScreen()" class="w-9 h-9 rounded-full bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-200">
+            ←
+          </button>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold leading-tight">จัดการสูตรโรงงาน</h2>
+            <p class="text-xs text-slate-400">เพิ่ม/แก้ไขสูตรเป้าความชื้นและค่าขนส่ง</p>
+          </div>
+        </div>
+        <span class="text-2xl">⚙️</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-2">
+        <button onclick="openEditFactoryModal(null)" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold rounded-xl text-sm sm:text-base shadow flex items-center justify-center gap-2">
+          <span>➕</span> เพิ่มโรงงานใหม่
+        </button>
+        <button onclick="confirmResetDefaults()" class="py-3 px-4 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 font-bold rounded-xl text-sm transition">
+          🔄 คืนค่าเริ่มต้น
+        </button>
+      </div>
+
+      <!-- List of Factories -->
+      <div id="manager-factories-list" class="space-y-3">
+        <!-- Populated by JavaScript -->
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: COST BREAKDOWN DETAILS -->
+  <!-- ================================================================= -->
+  <div id="modal-detail" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+    <div class="bg-white w-full max-w-[460px] max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 id="modal-detail-title" class="text-lg font-bold flex items-center gap-2">รายละเอียดโรงงาน</h3>
+        <button onclick="closeModal('modal-detail')" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-lg font-bold">✕</button>
+      </div>
+      <div id="modal-detail-body" class="p-4 sm:p-5 overflow-y-auto space-y-3 text-sm sm:text-base">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="p-3 bg-slate-50 border-t border-slate-200">
+        <button onclick="closeModal('modal-detail')" class="w-full py-3 bg-slate-200 hover:bg-slate-300 active:bg-slate-400 font-bold rounded-xl text-slate-800 text-base">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: MASTER MOISTURE TABLE -->
+  <!-- ================================================================= -->
+  <div id="modal-table" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+    <div class="bg-white w-full max-w-[480px] max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-lg font-bold flex items-center gap-2">📊 ตารางมาตรฐานหักความชื้น</h3>
+        <button onclick="closeModal('modal-table')" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-lg font-bold">✕</button>
+      </div>
+      <div class="p-4 overflow-y-auto">
+        <p class="text-xs text-slate-500 mb-3">ตารางหลักอ้างอิงการสูญเสียน้ำหนักและการร่อนคัดแยก (ปรับลดน้ำหนักแห้ง 0.5% แล้ว):</p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+              <tr>
+                <th class="p-2.5">ความชื้น</th>
+                <th class="p-2.5">นน.แห้ง</th>
+                <th class="p-2.5 text-amber-600">แตก</th>
+                <th class="p-2.5 text-rose-600">ฝุ่น</th>
+                <th class="p-2.5 text-emerald-600">เม็ดดี</th>
+              </tr>
+            </thead>
+            <tbody id="master-table-tbody" class="divide-y divide-slate-100">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="p-3 bg-slate-50 border-t border-slate-200">
+        <button onclick="closeModal('modal-table')" class="w-full py-3 bg-slate-200 hover:bg-slate-300 font-bold rounded-xl text-slate-800">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: ADD / EDIT FACTORY -->
+  <!-- ================================================================= -->
+  <div id="modal-edit-factory" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+    <div class="bg-white w-full max-w-[460px] max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 id="modal-factory-title" class="text-lg font-bold">➕ เพิ่มโรงงานใหม่</h3>
+        <button onclick="closeModal('modal-edit-factory')" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-lg font-bold">✕</button>
+      </div>
+      <form id="form-factory" onsubmit="handleSaveFactory(event)" class="p-4 sm:p-5 overflow-y-auto space-y-3.5 text-sm">
+        <input type="hidden" id="factory-form-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ชื่อโรงงาน</label>
+          <div class="flex gap-2">
+            <input type="text" id="factory-form-name" required class="flex-1 p-2.5 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none" placeholder="เช่น CP (ศรีสะเกษ)">
+            <input type="text" id="factory-form-emoji" class="w-16 text-center text-xl p-2 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none" value="🏭">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ความชื้นเป้าหมาย (%)</label>
+          <input type="number" step="0.1" id="factory-form-target" class="w-full p-2.5 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none" value="14.5">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ค่าเบี่ยงเบนความชื้น / Bias (% เช่น -0.5)</label>
+          <input type="number" step="0.1" id="factory-form-bias" class="w-full p-2.5 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none" value="0.0">
+          <p class="text-xs text-slate-400 mt-0.5">ใส่ค่าลบหากโรงงานวัดความชื้นได้ต่ำกว่าเกณฑ์จริง</p>
+        </div>
+
+        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
+          <div>
+            <span class="font-bold text-slate-800 block">การร่อนทำความสะอาด</span>
+            <span class="text-xs text-slate-500">เปิด = ร่อนคัดแยก (แตก/ฝุ่น) | ปิด = ไม่ร่อน (คิด 100%)</span>
+          </div>
+          <input type="checkbox" id="factory-form-sifting" class="w-6 h-6 accent-emerald-600 rounded">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ค่าขนส่ง (บาท/กก.แห้ง)</label>
+          <input type="number" step="0.01" id="factory-form-transport" class="w-full p-2.5 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none" value="0.15">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ราคาป้ายตั้งต้น (บาท)</label>
+          <input type="number" step="0.01" id="factory-form-default-price" class="w-full p-2.5 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none" value="10.00">
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeModal('modal-edit-factory')" class="flex-1 py-3 bg-slate-200 hover:bg-slate-300 font-bold rounded-xl text-slate-700">ยกเลิก</button>
+          <button type="submit" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 font-bold rounded-xl text-white shadow">บันทึกข้อมูล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- JAVASCRIPT CALCULATION & INTERACTIVITY ENGINE -->
+  <!-- ================================================================= -->
+  <script>
+    // 1. Master Moisture Shrinkage Table (-0.5% Dry weight update applied)
+    const MASTER_MOISTURE_TABLE = {
+      35: { dry_pct: 69.5, broken_pct: 4.5, dust_pct: 0.5, good_pct: 64.5 },
+      34: { dry_pct: 71.0, broken_pct: 4.5, dust_pct: 0.5, good_pct: 66.0 },
+      33: { dry_pct: 72.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 68.5 },
+      32: { dry_pct: 73.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 69.5 },
+      31: { dry_pct: 74.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 70.5 },
+      30: { dry_pct: 75.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 71.5 },
+      29: { dry_pct: 76.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 72.5 },
+      28: { dry_pct: 77.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 73.5 },
+      27: { dry_pct: 78.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 74.5 },
+      26: { dry_pct: 79.5, broken_pct: 3.5, dust_pct: 0.5, good_pct: 75.5 },
+      25: { dry_pct: 80.5, broken_pct: 2.5, dust_pct: 0.5, good_pct: 77.5 },
+      24: { dry_pct: 81.5, broken_pct: 2.5, dust_pct: 0.5, good_pct: 78.5 },
+      23: { dry_pct: 82.5, broken_pct: 2.5, dust_pct: 0.5, good_pct: 79.5 },
+      22: { dry_pct: 83.5, broken_pct: 2.5, dust_pct: 0.5, good_pct: 80.5 },
+      21: { dry_pct: 84.5, broken_pct: 2.5, dust_pct: 0.5, good_pct: 81.5 },
+      20: { dry_pct: 85.5, broken_pct: 2.5, dust_pct: 0.5, good_pct: 82.5 },
+    };
+
+    // 2. Default Factory Configurations
+    const DEFAULT_FACTORIES = [
+      {
+        id: "cp",
+        name: "CP (ศรีสะเกษ)",
+        moisture_bias: -0.5,
+        req_sifting: true,
+        transport_rate: 0.15,
+        default_price: 9.90,
+        color: "#C2410C",
+        bg_color: "#FFEDD5",
+        emoji: "🏢",
+        is_default: true,
+        target_moisture: 14.5
+      },
+      {
+        id: "kaona",
+        name: "ก้าวหน้าอาหารสัตว์",
+        moisture_bias: 0.0,
+        req_sifting: true,
+        transport_rate: 0.15,
+        default_price: 10.15,
+        color: "#059669",
+        bg_color: "#D1FAE5",
+        emoji: "🌽",
+        is_default: true,
+        target_moisture: 14.5
+      },
+      {
+        id: "betagro",
+        name: "Betagro (หนองบุญมาก)",
+        moisture_bias: -1.2,
+        req_sifting: false,
+        transport_rate: 0.35,
+        default_price: 9.80,
+        color: "#0369A1",
+        bg_color: "#E0F2FE",
+        emoji: "🏭",
+        is_default: true,
+        target_moisture: 14.5
+      },
+      {
+        id: "sunfeed",
+        name: "Sunfeed (สระบุรี)",
+        moisture_bias: -2.1,
+        req_sifting: true,
+        transport_rate: 0.40,
+        default_price: 10.10,
+        color: "#D97706",
+        bg_color: "#FEF3C7",
+        emoji: "🌾",
+        is_default: true,
+        target_moisture: 14.5
+      }
+    ];
+
+    // State Variables
+    let currentPin = "";
+    const CORRECT_PIN = "1234";
+    let factories = [];
+    let lastCalculatedRanking = [];
+    let lastBuyPrice = 6.75;
+
+    // Load initial storage
+    function initData() {
+      const stored = localStorage.getItem("corn_factories_config");
+      if (stored) {
+        try {
+          factories = JSON.parse(stored);
+        } catch (e) {
+          factories = JSON.parse(JSON.stringify(DEFAULT_FACTORIES));
+        }
+      } else {
+        factories = JSON.parse(JSON.stringify(DEFAULT_FACTORIES));
+        saveFactories();
+      }
+
+      const storedBuy = localStorage.getItem("corn_buy_price");
+      if (storedBuy) {
+        lastBuyPrice = parseFloat(storedBuy) || 6.75;
+      }
+    }
+
+    function saveFactories() {
+      localStorage.setItem("corn_factories_config", JSON.stringify(factories));
+    }
+
+    // --- PIN Management ---
+    function pressPin(digit) {
+      if (currentPin.length < 4) {
+        currentPin += digit;
+        updatePinDots();
+        if (currentPin.length === 4) {
+          setTimeout(verifyPin, 150);
+        }
+      }
+    }
+
+    function backspacePin() {
+      if (currentPin.length > 0) {
+        currentPin = currentPin.slice(0, -1);
+        updatePinDots();
+        document.getElementById("pin-error").innerText = "";
+      }
+    }
+
+    function clearPin() {
+      currentPin = "";
+      updatePinDots();
+      document.getElementById("pin-error").innerText = "";
+    }
+
+    function updatePinDots() {
+      const dotsContainer = document.getElementById("pin-dots");
+      const dots = dotsContainer.children;
+      for (let i = 0; i < 4; i++) {
+        if (i < currentPin.length) {
+          dots[i].className = "w-6 h-6 rounded-full border-2 border-amber-400 bg-amber-400 scale-110 shadow-[0_0_12px_rgba(251,191,36,0.6)] transition-all duration-200";
+        } else {
+          dots[i].className = "w-6 h-6 rounded-full border-2 border-amber-400 bg-transparent transition-all duration-200";
+        }
+      }
+    }
+
+    function verifyPin() {
+      if (currentPin === CORRECT_PIN) {
+        document.getElementById("pin-error").innerText = "";
+        clearPin();
+        showMainScreen();
+      } else {
+        const pinCard = document.getElementById("screen-pin");
+        pinCard.classList.add("shake");
+        document.getElementById("pin-error").innerText = "⚠️ รหัสผ่านไม่ถูกต้องค่ะแม่";
+        if (navigator.vibrate) navigator.vibrate(200);
+        setTimeout(() => {
+          pinCard.classList.remove("shake");
+          clearPin();
+        }, 500);
+      }
+    }
+
+    // Keyboard support
+    window.addEventListener("keydown", (e) => {
+      const pinScreen = document.getElementById("screen-pin");
+      if (!pinScreen.classList.contains("hidden")) {
+        if (e.key >= "0" && e.key <= "9") pressPin(e.key);
+        else if (e.key === "Backspace") backspacePin();
+        else if (e.key === "Escape" || e.key === "c" || e.key === "C") clearPin();
+      }
+    });
+
+    // --- Screen Navigation ---
+    function showScreen(screenId) {
+      document.getElementById("screen-pin").classList.add("hidden");
+      document.getElementById("screen-main").classList.add("hidden");
+      document.getElementById("screen-results").classList.add("hidden");
+      document.getElementById("screen-manager").classList.add("hidden");
+      document.getElementById(screenId).classList.remove("hidden");
+      window.scrollTo(0, 0);
+    }
+
+    function lockApp() {
+      clearPin();
+      showScreen("screen-pin");
+    }
+
+    function showMainScreen() {
+      renderFactoryInputs();
+      document.getElementById("input-buy-price").value = lastBuyPrice.toFixed(2);
+      showScreen("screen-main");
+    }
+
+    function showResultsScreen() {
+      showScreen("screen-results");
+    }
+
+    function showManagerScreen() {
+      renderManagerList();
+      showScreen("screen-manager");
+    }
+
+    // --- Quick Adjustment Bar Helpers ---
+    function adjustVal(elementId, delta) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      let val = parseFloat(el.value.replace(/,/g, '') || '0');
+      let newVal = Math.max(0, val + delta);
+      el.value = newVal.toFixed(2);
+    }
+
+    function appendDot(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      if (!el.value.includes(".")) {
+        el.value = (el.value || "0") + ".";
+      }
+    }
+
+    function clearVal(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) el.value = "";
+    }
+
+    // --- Render Factory Input Cards ---
+    function renderFactoryInputs() {
+      const container = document.getElementById("factory-inputs-list");
+      container.innerHTML = "";
+
+      factories.forEach((f) => {
+        const siftingText = f.req_sifting ? "ร่อนคัดแยก" : "ไม่ร่อน (100%)";
+        const biasText = f.moisture_bias >= 0 ? `+${f.moisture_bias.toFixed(1)}%` : `${f.moisture_bias.toFixed(1)}%`;
+        const inputId = `fac-price-${f.id}`;
+        const currentVal = (f.default_price !== undefined ? f.default_price : 10.00).toFixed(2);
+
+        const card = document.createElement("div");
+        card.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2.5";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">${f.emoji || '🏭'}</span>
+              <span class="font-bold text-base sm:text-lg text-slate-800">${f.name}</span>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded-full font-semibold ${f.req_sifting ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600'}">
+              ${siftingText}
+            </span>
+          </div>
+
+          <div class="text-xs text-slate-500">
+            ไบแอส: <span class="font-semibold text-slate-700">${biasText}</span> | 
+            ค่าส่ง: <span class="font-semibold text-slate-700">${f.transport_rate.toFixed(2)} ฿</span> | 
+            เป้าชื้น: <span class="font-semibold text-slate-700">${f.target_moisture || 14.5}%</span>
+          </div>
+
+          <div class="relative">
+            <input type="text" id="${inputId}" class="w-full text-center text-2xl font-bold py-2.5 px-4 rounded-xl border-2 border-slate-200 focus:border-sky-600 focus:outline-none bg-slate-50 text-slate-900" value="${currentVal}">
+            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 font-semibold text-slate-400 text-xs">บาท/กก.</span>
+          </div>
+
+          <div class="grid grid-cols-6 gap-1 pt-0.5">
+            <button onclick="adjustVal('${inputId}', -0.50)" class="py-2 bg-slate-100 active:bg-slate-200 text-rose-600 font-bold rounded-lg text-xs">-0.50</button>
+            <button onclick="adjustVal('${inputId}', -0.10)" class="py-2 bg-slate-100 active:bg-slate-200 text-rose-600 font-bold rounded-lg text-xs">-0.10</button>
+            <button onclick="appendDot('${inputId}')" class="py-2 bg-amber-50 active:bg-amber-100 text-amber-700 font-bold rounded-lg text-xs">📍 .</button>
+            <button onclick="adjustVal('${inputId}', +0.10)" class="py-2 bg-slate-100 active:bg-slate-200 text-emerald-700 font-bold rounded-lg text-xs">+0.10</button>
+            <button onclick="adjustVal('${inputId}', +0.50)" class="py-2 bg-slate-100 active:bg-slate-200 text-emerald-700 font-bold rounded-lg text-xs">+0.50</button>
+            <button onclick="clearVal('${inputId}')" class="py-2 bg-rose-50 active:bg-rose-100 text-rose-600 font-bold rounded-lg text-xs">✕ ลบ</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // --- Calculation Algorithm ---
+    function getMoistureTableValues(moisture) {
+      const m = Math.max(20.0, Math.min(35.0, moisture));
+      const low = Math.floor(m);
+      const high = Math.ceil(m);
+      if (low === high) {
+        return MASTER_MOISTURE_TABLE[low];
+      }
+      const fraction = m - low;
+      const rLow = MASTER_MOISTURE_TABLE[low];
+      const rHigh = MASTER_MOISTURE_TABLE[high];
+      return {
+        dry_pct: rLow.dry_pct + fraction * (rHigh.dry_pct - rLow.dry_pct),
+        broken_pct: rLow.broken_pct + fraction * (rHigh.broken_pct - rLow.broken_pct),
+        dust_pct: rLow.dust_pct + fraction * (rHigh.dust_pct - rLow.dust_pct),
+        good_pct: rLow.good_pct + fraction * (rHigh.good_pct - rLow.good_pct),
+      };
+    }
+
+    function calculateSingleFactory(f, buyPrice, baseMoisture, sellPrice) {
+      const truckWeight = 30000.0;
+      const dryingCostPerKg = 0.45;
+      const discountBroken = 2.00;
+      const discountDust = 7.50;
+
+      const effectiveMoisture = baseMoisture + (f.moisture_bias || 0.0);
+      const tableVals = getMoistureTableValues(effectiveMoisture);
+
+      const rawCost = truckWeight * buyPrice;
+      const finalWeight = truckWeight * (tableVals.dry_pct / 100.0);
+      const dryingCost = finalWeight * dryingCostPerKg;
+      const transportCost = finalWeight * (f.transport_rate || 0.0);
+      const totalCost = rawCost + dryingCost + transportCost;
+
+      let totalRevenue = 0.0;
+      let goodWeight = finalWeight;
+      let brokenWeight = 0.0;
+      let dustWeight = 0.0;
+      let brokenPrice = Math.max(0.0, sellPrice - discountBroken);
+      let dustPrice = Math.max(0.0, sellPrice - discountDust);
+
+      if (f.req_sifting) {
+        brokenWeight = finalWeight * (tableVals.broken_pct / 100.0);
+        dustWeight = finalWeight * (tableVals.dust_pct / 100.0);
+        goodWeight = finalWeight - brokenWeight - dustWeight;
+        totalRevenue = (goodWeight * sellPrice) + (brokenWeight * brokenPrice) + (dustWeight * dustPrice);
+      } else {
+        totalRevenue = finalWeight * sellPrice;
+      }
+
+      const netProfit = totalRevenue - totalCost;
+
+      return {
+        factory_id: f.id,
+        factory_name: f.name,
+        factory_emoji: f.emoji || '🏭',
+        req_sifting: f.req_sifting,
+        transport_rate: f.transport_rate,
+        moisture_bias: f.moisture_bias,
+        buy_price: buyPrice,
+        sell_price: sellPrice,
+        effective_moisture: effectiveMoisture,
+        table_dry_pct: tableVals.dry_pct,
+        table_broken_pct: tableVals.broken_pct,
+        table_dust_pct: tableVals.dust_pct,
+        table_good_pct: tableVals.good_pct,
+        truck_weight: truckWeight,
+        final_weight: finalWeight,
+        raw_material_cost: rawCost,
+        drying_cost: dryingCost,
+        transport_cost: transportCost,
+        total_cost: totalCost,
+        good_weight: goodWeight,
+        broken_weight: brokenWeight,
+        dust_weight: dustWeight,
+        broken_price: brokenPrice,
+        dust_price: dustPrice,
+        total_revenue: totalRevenue,
+        net_profit: netProfit,
+        profit_per_kg_wet: netProfit / truckWeight,
+        profit_per_kg_dry: netProfit / finalWeight
+      };
+    }
+
+    function executeCalculate() {
+      const buyPriceInput = document.getElementById("input-buy-price");
+      const buyPrice = parseFloat(buyPriceInput.value.replace(/,/g, ''));
+      if (isNaN(buyPrice) || buyPrice <= 0) {
+        alert("⚠️ กรุณากรอกราคารับซื้อข้าวโพดชื้นให้ถูกต้องค่ะแม่");
+        return;
+      }
+
+      lastBuyPrice = buyPrice;
+      localStorage.setItem("corn_buy_price", buyPrice.toString());
+
+      // Collect factory selling prices & save as defaults
+      const ranking = [];
+      factories.forEach((f) => {
+        const el = document.getElementById(`fac-price-${f.id}`);
+        const p = el ? parseFloat(el.value.replace(/,/g, '')) : f.default_price;
+        const validPrice = isNaN(p) ? (f.default_price || 10.0) : p;
+        f.default_price = validPrice; // Remember in config
+
+        const res = calculateSingleFactory(f, buyPrice, 30.0, validPrice);
+        ranking.push(res);
+      });
+
+      saveFactories();
+
+      // Sort by net profit descending (Rank #1 is highest)
+      ranking.sort((a, b) => b.net_profit - a.net_profit);
+      lastCalculatedRanking = ranking;
+
+      renderResults(ranking, buyPrice);
+      showResultsScreen();
+    }
+
+    // --- Render Results ---
+    function renderResults(ranking, buyPrice) {
+      document.getElementById("results-sub-title").innerText = `ซื้อ ${buyPrice.toFixed(2)} ฿ (ชื้น 30%) | ${ranking.length} โรงงาน`;
+      const container = document.getElementById("results-cards-container");
+      container.innerHTML = "";
+
+      if (ranking.length === 0) return;
+
+      const winner = ranking[0];
+      const runnerUp = ranking.length > 1 ? ranking[1] : null;
+      const diffVs2nd = runnerUp ? (winner.net_profit - runnerUp.net_profit) : 0;
+      const isWinnerProfit = winner.net_profit >= 0;
+
+      // 👑 WINNER HERO BANNER
+      const winnerCard = document.createElement("div");
+      winnerCard.className = "bg-emerald-50 border-2 border-emerald-500 rounded-3xl p-5 shadow-md flex flex-col items-center text-center space-y-3";
+      winnerCard.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="text-3xl">🏆</span>
+          <span class="text-xs font-bold uppercase tracking-wider bg-emerald-600 text-white px-3 py-1 rounded-full">อันดับ 1 กำไรสูงสุด</span>
+        </div>
+
+        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+          ${winner.factory_emoji} ${winner.factory_name}
+        </div>
+
+        <div class="w-full bg-white border border-emerald-200 rounded-2xl py-4 px-3 shadow-inner">
+          <div class="text-xs font-semibold text-slate-500 mb-0.5">กำไรสุทธิคาดการณ์ (30 ตัน)</div>
+          <div class="text-3xl sm:text-4xl font-black ${isWinnerProfit ? 'text-emerald-600' : 'text-rose-600'}">
+            ${winner.net_profit >= 0 ? '+' : ''}${winner.net_profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-lg font-bold">บาท</span>
+          </div>
+          <div class="text-xs text-slate-500 mt-1">
+            เฉลี่ย: <span class="font-bold text-slate-700">${winner.profit_per_kg_wet >= 0 ? '+' : ''}${winner.profit_per_kg_wet.toFixed(2)}</span> ฿/กก.ชื้น | 
+            <span class="font-bold text-slate-700">${winner.profit_per_kg_dry >= 0 ? '+' : ''}${winner.profit_per_kg_dry.toFixed(2)}</span> ฿/กก.แห้ง
+          </div>
+        </div>
+
+        <div class="text-xs text-slate-600">
+          ราคาป้าย: <span class="font-bold">${winner.sell_price.toFixed(2)} ฿</span> | 
+          นน.แห้ง: <span class="font-bold">${winner.final_weight.toLocaleString('en-US', { maximumFractionDigits: 0 })} กก.</span> (${winner.table_dry_pct.toFixed(1)}%) | 
+          ค่าส่ง: <span class="font-bold">${winner.transport_rate.toFixed(2)} ฿</span>
+        </div>
+
+        ${runnerUp ? `
+          <div class="w-full py-2 px-3 bg-emerald-100/80 rounded-xl text-xs font-bold text-emerald-900">
+            🌟 แนะนำส่งที่นี่! ได้กำไรมากกว่าอันดับ 2 (${runnerUp.factory_name}) อยู่ 
+            <span class="text-emerald-700 underline font-extrabold">+${diffVs2nd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</span>
+          </div>
+        ` : ''}
+
+        <button onclick="openDetailModal(0)" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow">
+          <span>ℹ️</span> ดูวิธีคิดต้นทุนละเอียด
+        </button>
+      `;
+      container.appendChild(winnerCard);
+
+      // 🥈 OTHER FACTORY CARDS (#2, #3, #4...)
+      if (ranking.length > 1) {
+        const othersHeader = document.createElement("h3");
+        othersHeader.className = "text-base font-bold text-slate-800 pt-2";
+        othersHeader.innerText = "📊 อันดับกำไรโรงงานอื่นๆ:";
+        container.appendChild(othersHeader);
+
+        for (let i = 1; i < ranking.length; i++) {
+          const r = ranking[i];
+          const diffVsWinner = r.net_profit - winner.net_profit;
+          const isPos = r.net_profit >= 0;
+
+          const card = document.createElement("div");
+          card.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2.5";
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-bold text-xs">#${i + 1}</span>
+                <span class="text-xl">${r.factory_emoji}</span>
+                <span class="font-bold text-base text-slate-800">${r.factory_name}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded font-semibold ${r.req_sifting ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600'}">
+                  ${r.req_sifting ? 'ร่อน' : 'ไม่ร่อน'}
+                </span>
+              </div>
+              <span class="text-lg font-extrabold ${isPos ? 'text-emerald-600' : 'text-rose-600'}">
+                ${r.net_profit >= 0 ? '+' : ''}${r.net_profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿
+              </span>
+            </div>
+
+            <div class="text-xs text-slate-500">
+              ป้าย: ${r.sell_price.toFixed(2)} ฿ | นน.แห้ง ${r.final_weight.toLocaleString('en-US', { maximumFractionDigits: 0 })} กก. (${r.table_dry_pct.toFixed(1)}%) | ส่ง ${r.transport_rate.toFixed(2)} ฿
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-xs py-1 px-2.5 bg-rose-50 text-rose-600 font-bold rounded-lg">
+                น้อยกว่าอันดับ 1 อยู่ ${Math.abs(diffVsWinner).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿
+              </span>
+              <button onclick="openDetailModal(${i})" class="text-xs text-sky-600 font-bold hover:underline flex items-center gap-1">
+                <span>วิธีคิดต้นทุน</span> →
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+        }
+      }
+    }
+
+    // --- Detail Modal ---
+    function openDetailModal(rankIndex) {
+      const res = lastCalculatedRanking[rankIndex];
+      if (!res) return;
+
+      document.getElementById("modal-detail-title").innerHTML = `${res.factory_emoji} รายละเอียด: ${res.factory_name}`;
+      const isProfit = res.net_profit >= 0;
+
+      let siftingHtml = "";
+      if (res.req_sifting) {
+        siftingHtml = `
+          <div class="p-2.5 bg-amber-50 rounded-xl space-y-1 text-xs sm:text-sm border border-amber-200">
+            <div class="font-bold text-amber-900">🌾 การร่อนคัดแยกเกรด:</div>
+            <div class="flex justify-between">
+              <span>- เม็ดดี (${res.table_good_pct.toFixed(1)}%):</span>
+              <span class="font-semibold">${res.good_weight.toLocaleString('en-US', { maximumFractionDigits: 0 })} กก. @ ${res.sell_price.toFixed(2)} ฿</span>
+            </div>
+            <div class="flex justify-between text-amber-800">
+              <span>- เม็ดแตก (${res.table_broken_pct.toFixed(1)}%):</span>
+              <span class="font-semibold">${res.broken_weight.toLocaleString('en-US', { maximumFractionDigits: 0 })} กก. @ ${res.broken_price.toFixed(2)} ฿</span>
+            </div>
+            <div class="flex justify-between text-rose-700">
+              <span>- ฝุ่น (${res.table_dust_pct.toFixed(1)}%):</span>
+              <span class="font-semibold">${res.dust_weight.toLocaleString('en-US', { maximumFractionDigits: 0 })} กก. @ ${res.dust_price.toFixed(2)} ฿</span>
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById("modal-detail-body").innerHTML = `
+        <div class="p-4 rounded-2xl ${isProfit ? 'bg-emerald-50 border-2 border-emerald-500' : 'bg-rose-50 border-2 border-rose-500'} text-center space-y-1">
+          <div class="text-xs text-slate-500">กำไรสุทธิจากการส่งโรงงานนี้ (30 ตัน)</div>
+          <div class="text-3xl font-black ${isProfit ? 'text-emerald-600' : 'text-rose-600'}">
+            ${res.net_profit >= 0 ? '+' : ''}${res.net_profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท
+          </div>
+          <div class="text-xs text-slate-600">
+            เฉลี่ย: <b>${res.profit_per_kg_wet >= 0 ? '+' : ''}${res.profit_per_kg_wet.toFixed(2)}</b> ฿/กก.ชื้น | 
+            <b>${res.profit_per_kg_dry >= 0 ? '+' : ''}${res.profit_per_kg_dry.toFixed(2)}</b> ฿/กก.แห้ง
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2 divide-y divide-slate-100 text-slate-700">
+          <div class="flex justify-between pt-2">
+            <span>ราคารับซื้อข้าวโพดสด (30%):</span>
+            <span class="font-bold">${res.buy_price.toFixed(2)} บาท/กก.</span>
+          </div>
+          <div class="flex justify-between pt-2">
+            <span>ราคาขายหน้าป้าย:</span>
+            <span class="font-bold">${res.sell_price.toFixed(2)} บาท/กก.</span>
+          </div>
+          <div class="flex justify-between pt-2">
+            <span>น้ำหนักแห้งสุทธิ (${res.table_dry_pct.toFixed(1)}%):</span>
+            <span class="font-bold text-slate-900">${res.final_weight.toLocaleString('en-US', { maximumFractionDigits: 2 })} กก.</span>
+          </div>
+
+          ${siftingHtml}
+
+          <div class="flex justify-between pt-2 text-emerald-800 font-extrabold text-base">
+            <span>💰 รายรับรวมทั้งหมด:</span>
+            <span>${res.total_revenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</span>
+          </div>
+          <div class="flex justify-between pt-2 text-xs text-slate-500 pl-2">
+            <span>- ค่าซื้อข้าวโพดสด (30 ตัน):</span>
+            <span>${res.raw_material_cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿</span>
+          </div>
+          <div class="flex justify-between pt-2 text-xs text-slate-500 pl-2">
+            <span>- ค่าอบแห้ง (0.45 ฿):</span>
+            <span>${res.drying_cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿</span>
+          </div>
+          <div class="flex justify-between pt-2 text-xs text-slate-500 pl-2">
+            <span>- ค่าขนส่ง (${res.transport_rate.toFixed(2)} ฿):</span>
+            <span>${res.transport_cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿</span>
+          </div>
+          <div class="flex justify-between pt-2 text-rose-600 font-extrabold text-base">
+            <span>💸 ต้นทุนรวมทั้งหมด:</span>
+            <span>${res.total_cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</span>
+          </div>
+        </div>
+      `;
+
+      openModal('modal-detail');
+    }
+
+    // --- Master Table Modal ---
+    function openTableModal() {
+      const tbody = document.getElementById("master-table-tbody");
+      tbody.innerHTML = "";
+      for (let m = 35; m >= 20; m--) {
+        const row = MASTER_MOISTURE_TABLE[m];
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-2.5 font-bold text-slate-900">${m}%</td>
+          <td class="p-2.5 font-semibold text-slate-700">${row.dry_pct.toFixed(1)}%</td>
+          <td class="p-2.5 text-amber-600 font-medium">${row.broken_pct.toFixed(1)}%</td>
+          <td class="p-2.5 text-rose-600 font-medium">${row.dust_pct.toFixed(1)}%</td>
+          <td class="p-2.5 text-emerald-600 font-bold">${row.good_pct.toFixed(1)}%</td>
+        `;
+        tbody.appendChild(tr);
+      }
+      openModal("modal-table");
+    }
+
+    // --- Manager Screen Logic ---
+    function renderManagerList() {
+      const list = document.getElementById("manager-factories-list");
+      list.innerHTML = "";
+      factories.forEach((f, idx) => {
+        const siftingText = f.req_sifting ? "ร่อนคัดแยก" : "ไม่ร่อน (100%)";
+        const biasText = f.moisture_bias >= 0 ? `+${f.moisture_bias.toFixed(1)}%` : `${f.moisture_bias.toFixed(1)}%`;
+
+        const card = document.createElement("div");
+        card.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between";
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">${f.emoji || '🏭'}</span>
+            <div>
+              <div class="font-bold text-base text-slate-900">${f.name}</div>
+              <div class="text-xs text-slate-500">
+                ไบแอส: ${biasText} | ${siftingText} | ค่าส่ง: ${f.transport_rate.toFixed(2)} ฿
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <button onclick="openEditFactoryModal(${idx})" class="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 hover:bg-sky-100 flex items-center justify-center font-bold text-sm">
+              ✏️
+            </button>
+            <button onclick="deleteFactory(${idx})" class="w-9 h-9 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center font-bold text-sm">
+              🗑️
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function openEditFactoryModal(index) {
+      const form = document.getElementById("form-factory");
+      form.reset();
+      if (index !== null) {
+        const f = factories[index];
+        document.getElementById("modal-factory-title").innerText = `✏️ แก้ไขสูตร: ${f.name}`;
+        document.getElementById("factory-form-id").value = f.id;
+        document.getElementById("factory-form-name").value = f.name;
+        document.getElementById("factory-form-emoji").value = f.emoji || '🏭';
+        document.getElementById("factory-form-target").value = f.target_moisture || 14.5;
+        document.getElementById("factory-form-bias").value = f.moisture_bias || 0.0;
+        document.getElementById("factory-form-sifting").checked = f.req_sifting;
+        document.getElementById("factory-form-transport").value = f.transport_rate || 0.15;
+        document.getElementById("factory-form-default-price").value = f.default_price || 10.0;
+      } else {
+        document.getElementById("modal-factory-title").innerText = "➕ เพิ่มโรงงานใหม่";
+        document.getElementById("factory-form-id").value = "fac_" + Date.now();
+        document.getElementById("factory-form-name").value = "";
+        document.getElementById("factory-form-emoji").value = "🏭";
+        document.getElementById("factory-form-target").value = "14.5";
+        document.getElementById("factory-form-bias").value = "0.0";
+        document.getElementById("factory-form-sifting").checked = true;
+        document.getElementById("factory-form-transport").value = "0.15";
+        document.getElementById("factory-form-default-price").value = "10.00";
+      }
+      openModal("modal-edit-factory");
+    }
+
+    function handleSaveFactory(e) {
+      e.preventDefault();
+      const id = document.getElementById("factory-form-id").value;
+      const name = document.getElementById("factory-form-name").value.trim();
+      const emoji = document.getElementById("factory-form-emoji").value.trim() || '🏭';
+      const target = parseFloat(document.getElementById("factory-form-target").value) || 14.5;
+      const bias = parseFloat(document.getElementById("factory-form-bias").value) || 0.0;
+      const sifting = document.getElementById("factory-form-sifting").checked;
+      const transport = parseFloat(document.getElementById("factory-form-transport").value) || 0.0;
+      const defaultPrice = parseFloat(document.getElementById("factory-form-default-price").value) || 10.0;
+
+      const existingIndex = factories.findIndex(f => f.id === id);
+      const factoryObj = {
+        id: id,
+        name: name,
+        emoji: emoji,
+        target_moisture: target,
+        moisture_bias: bias,
+        req_sifting: sifting,
+        transport_rate: transport,
+        default_price: defaultPrice,
+      };
+
+      if (existingIndex >= 0) {
+        factories[existingIndex] = factoryObj;
+      } else {
+        factories.push(factoryObj);
+      }
+
+      saveFactories();
+      closeModal("modal-edit-factory");
+      renderManagerList();
+    }
+
+    function deleteFactory(index) {
+      const f = factories[index];
+      if (confirm(`⚠️ ยืนยันการลบ ${f.name} ออกจากระบบใช่หรือไม่คะแม่?`)) {
+        factories.splice(index, 1);
+        saveFactories();
+        renderManagerList();
+      }
+    }
+
+    function confirmResetDefaults() {
+      if (confirm("🔄 ต้องการรีเซ็ตสูตรโรงงานทั้งหมดกลับเป็นค่าเริ่มต้น (CP, Betagro, Sunfeed, ก้าวหน้า) ใช่หรือไม่คะ?")) {
+        factories = JSON.parse(JSON.stringify(DEFAULT_FACTORIES));
+        saveFactories();
+        renderManagerList();
+      }
+    }
+
+    // Modal Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.remove("hidden");
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    // Initialize App
+    initData();
+  </script>
+</body>
+</html>
